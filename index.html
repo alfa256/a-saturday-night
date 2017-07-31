@@ -104,6 +104,9 @@
         <a-asset-item id="spotlight-obj" src="assets/room/spotlight.gltf"></a-asset-item>
         <img id="spotlight-img" src="assets/room/spotlight.png">
         <img id="star-img" src="assets/room/star.png">
+
+        <a-asset-item id="discoball-obj" src="assets/room/discoball.obj"></a-asset-item>
+
         <a-asset-item id="tv-obj" src="assets/room/tv.gltf"></a-asset-item>
 
         <a-asset-item id="avatar1-head-obj" src="assets/avatar1/avatar1-head.gltf"></a-asset-item>
@@ -165,6 +168,18 @@
         <a-animation attribute="scale" begin="dancing" to="1 1 1" dur="1000" easing="ease-out-elastic"></a-animation>
       </a-entity>
 
+
+      <!-- wall mirror -->
+      <a-box rotation="0 0 0" position="-3.85 1.3 0" height="2" depth="2" width="0.05" mirror="distance: 8; resolution:1024;repeat:true; wait: 16;">
+        <a-animation attribute="position" from="-3.85 -2 0" to="-3.85 1.3 0" dur="10000"></a-animation>
+      </a-box>
+
+      <!-- disco ball -->
+      <a-entity position="0 2 3">
+      <a-box position="0 1 0" height="2" width="0.03" depth="0.03" color="#000000"></a-box>
+      <a-entity mirror="distance: 8; repeat:true; resolution:64; wait:100;" id="#ball" obj-model="obj:#discoball-obj" scale="0.4 0.4 0.4"></a-entity>
+      <a-animation attribute="rotation" easing="linear" from="0 0 0" to="0 360 0" dur="15000" repeat="indefinite"></a-animation>
+      </a-entity>
 
       <!-- room, floor and TV sets -->
       <a-entity id="room" gltf-model="#set-obj" proxy-event="event: dancing" roomcolor="#999" >
