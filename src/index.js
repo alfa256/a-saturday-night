@@ -15,6 +15,8 @@ require('./components/roomcolor.js');
 require('./components/ui-raycaster.js');
 require('./components/gifcapture.js');
 
+require('aframe-mirror-component');
+
 // States
 require('./components/states/avatarSelection.js');
 require('./components/states/collectUrl.js');
