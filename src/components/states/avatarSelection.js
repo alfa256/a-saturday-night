@@ -2,6 +2,7 @@ var audioCapabilities = require('../../utils').capabilities.audio;
 
 AFRAME.registerComponent('avatar-selection', {
   init: function () {
+    var el = this.el;
     var avatarSelectionEl = this.avatarSelectionEl = this.el.querySelector('#avatarSelection');
     var avatarHeadEl = document.getElementById('avatarHead');
     var rightHandEl = document.getElementById('rightHand');
@@ -25,9 +26,9 @@ AFRAME.registerComponent('avatar-selection', {
       autoplay: true,
       positional: false
     });
+    el.setAttribute('game-state', 'selectedAvatar', null);
     this.insertSelectionHands();
-
-    this.el.querySelector('#floor').setAttribute('discofloor', {pattern: 'idle'});
+    el.querySelector('#floor').setAttribute('discofloor', {pattern: 'idle'});
   },
 
   insertSelectionHands: function () {
@@ -54,12 +55,12 @@ AFRAME.registerComponent('avatar-selection', {
     //rightRayEl.setAttribute('visible', false);
     // Raycaster setup
     rightSelectionHandEl.setAttribute('ui-raycaster', {
-      far: 2,
+      far: 4,
       objects: '.head',
       rotation: 0
     });
     leftSelectionHandEl.setAttribute('ui-raycaster', {
-      far: 2,
+      far: 4,
       objects: '.head',
       rotation: 0
     });
@@ -94,10 +95,15 @@ AFRAME.registerComponent('avatar-selection', {
     var selectedAvatarEl = this.selectedAvatarEl = avatarEl;
     var leftHandEl = el.querySelector('#leftHand');
     var rightHandEl = el.querySelector('#rightHand');
-    this.el.setAttribute('game-state', 'selectedAvatar', this.selectedAvatarEl);
+    el.setAttribute('game-state', 'selectedAvatar', this.selectedAvatarEl);
 
+    leftHandEl.setAttribute('position', {x: 0, y: 0, z: 0});
+    leftHandEl.setAttribute('rotation', {x: 0, y: 0, z: 0});
     leftHandEl.setAttribute('gltf-model',
                              selectedAvatarEl.querySelector('.leftHand').getAttribute('gltf-model'));
+
+    rightHandEl.setAttribute('position', {x: 0, y: 0, z: 0});
+    rightHandEl.setAttribute('rotation', {x: 0, y: 0, z: 0});
     rightHandEl.setAttribute('gltf-model',
                              selectedAvatarEl.querySelector('.rightHand').getAttribute('gltf-model'));
     this.removeSelectionHands();

@@ -58,15 +58,26 @@ AFRAME.registerComponent('dancing', {
       avatarEl.querySelector('.head').getAttribute('gltf-model'));
   },
 
+  // fix until A-Frame issue is resolved
+  // https://github.com/aframevr/aframe/issues/2928
+  whenLoaded: function(el) {
+    return new Promise(function (resolve) {
+      if (el.hasLoaded) resolve(el);
+      el.addEventListener('loaded', function() {
+        resolve(el)
+      });
+    })
+  },
+
   initMimoRig: function () {
     var avatarMimoRigEl = this.avatarMimoRigEl = document.createElement('a-entity');
     var avatarMimoRigPivotEl = this.avatarMimoRigPivotEl = document.createElement('a-entity');
     var rightHandMimoEl = this.rightHandMimoEl = document.createElement('a-entity');
     var leftHandMimoEl = this.leftHandMimoEl = document.createElement('a-entity');
     var headMimoEl = this.headMimoEl = document.createElement('a-entity');
-    headMimoEl.setAttribute('mimo', '#avatarHead');
-    rightHandMimoEl.setAttribute('mimo', '#leftHand');
-    leftHandMimoEl.setAttribute('mimo', '#rightHand');
+    this.whenLoaded(headMimoEl).then(function (el) { el.setAttribute('mimo', '#avatarHead'); })
+    this.whenLoaded(rightHandMimoEl).then(function (el) { el.setAttribute('mimo', '#leftHand'); })
+    this.whenLoaded(leftHandMimoEl).then(function (el) { el.setAttribute('mimo', '#rightHand'); })
     avatarMimoRigEl.appendChild(rightHandMimoEl);
     avatarMimoRigEl.appendChild(leftHandMimoEl);
     avatarMimoRigEl.setAttribute('position', '0 0 -2.5');
@@ -93,11 +104,23 @@ AFRAME.registerComponent('dancing', {
 
   remove: function () {
     var el = this.el;
+    var leftHandEl = el.querySelector('#leftHand');
+    var rightHandEl = el.querySelector('#rightHand');
     this.textElement.setAttribute('visible', false);
     this.counter0.setAttribute('visible', false);
     this.counter1.setAttribute('visible', false);
-    el.querySelector('#leftHand').removeAttribute('tracked-controls');
-    el.querySelector('#rightHand').removeAttribute('tracked-controls');
+    leftHandEl.removeAttribute('tracked-controls');
+    leftHandEl.removeAttribute('vive-controls');
+    leftHandEl.removeAttribute('oculus-touch-controls');
+    leftHandEl.setAttribute('position', {x: 0, y: 0, z:0});
+    leftHandEl.setAttribute('rotation', {x: 0, y: 0, z:0});
+
+    rightHandEl.removeAttribute('tracked-controls');
+    rightHandEl.removeAttribute('vive-controls');
+    rightHandEl.removeAttribute('oculus-touch-controls');
+    rightHandEl.setAttribute('position', {x: 0, y: 0, z:0});
+    rightHandEl.setAttribute('rotation', {x: 0, y: 0, z:0});
+
     document.querySelector('#room [sound]').components.sound.stopSound();
     this.avatarMimoRigEl.setAttribute('visible', false);
   }
